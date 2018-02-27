@@ -9,13 +9,19 @@ class Employee < ActiveRecord::Base
   validates_inclusion_of :hourly_rate, in: 40..200
 
   # 3. Register callback Methods using symbols
-  before_create :initialize_password
+  # before_create :initialize_password_before
+  after_create :initialize_password_after
 
   # ... last. Private methods
   private
-    def initialize_password
+    def initialize_password_before
       self.password = (0...8).map { (65 + rand(26)).chr }.join
     end
+
+    def initialize_password_after
+      self.update(password: (0...8).map { (65 + rand(26)).chr }.join)
+    end
+
 end
 
 
